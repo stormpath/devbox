@@ -1,6 +1,5 @@
 #!/bin/bash
 
-BBUSERNAME=$1
 DELAY=5
 XCODE_POLL_DELAY=10
 XCODE_TIMEOUT=60
@@ -16,16 +15,8 @@ else
   	echo "Checking UID... good"
 fi
 
-# Validate input
-if [[ $BBUSERNAME =~ "@" ]]; then
-	echo "Fatal: Possible email address detected. BitBucket username only."
-elif [[ "$BBUSERNAME" =~ [a-z]|[A-Z]|[0-9] ]]; then
-	echo "Starting install... CTRL+C now to abort. Sleeping $DELAY seconds."
-	sleep $DELAY
-else
-	echo "Usage: ./${0##*/} BITBUCKET_USERNAME"
-        exit
-fi
+echo "Starting install... CTRL+C now to abort. Sleeping $DELAY seconds."
+sleep $DELAY
 
 # Get down to business
 echo "Triggering Xcode install. Follow pop-up screen directions _you much click Install_ ..."
@@ -76,8 +67,8 @@ brew install git
 echo "Creating /vagrant directories with the proper permissions..."
 sudo mkdir /vagrant && sudo chown $USER /vagrant
 
-echo "Cloning the docker GIT repo from BitBucker with user account $BBUSERNAME..."
-git clone https://$BBUSERNAME@bitbucket.org/stormpath/docker.git /vagrant
+echo "Cloning the docker GIT repo from BitBucker..."
+git clone git@bitbucket.org:stormpath/docker.git /vagrant
 
 echo "About to run Docker setup script..."
 /vagrant/SETUP.sh
