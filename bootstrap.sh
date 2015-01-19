@@ -58,7 +58,7 @@ echo "Importing rvm variables into this session..."
 source "$HOME/.rvm/scripts/rvm"
 
 echo "Installing homebrew..."
-ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 ##homebrew says: sudo mv /opt/local ~/macports  #…..skipped.
 echo "Starting install of GIT via brew..."
