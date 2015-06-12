@@ -64,11 +64,11 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 echo "Starting install of GIT via brew..."
 brew install git
 
-echo "Creating /vagrant directories with the proper permissions..."
-sudo mkdir /vagrant && sudo chown $USER /vagrant
+echo "Creating /boot2docker directories with the proper permissions..."
+sudo mkdir /boot2docker && sudo chown $USER /vagrant
 
 echo "Cloning the docker GIT repo from BitBucker..."
-git clone git@bitbucket.org:stormpath/docker.git /vagrant
+git clone git@bitbucket.org:stormpath/docker.git /boot2docker
 
 echo "About to run Docker setup script..."
-/vagrant/SETUP.sh
+/boot2docker/SETUP.sh
