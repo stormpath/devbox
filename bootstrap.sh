@@ -19,32 +19,32 @@ echo "Starting install... CTRL+C now to abort. Sleeping $DELAY seconds."
 sleep $DELAY
 
 # Get down to business
-echo "Triggering Xcode install. Follow pop-up screen directions _you much click Install_ ..."
-xcode-select --install
+XCODE_STATUS=`pkgutil --pkg-info=com.apple.pkg.CLTools_Executables | grep "install-time"`
+if [ -z "$XCODE_STATUS" ]; then
+  echo "Triggering Xcode install. Follow pop-up screen directions _you must click Install_ ..."
+  xcode-select --install
+  
+  while :
+  do
+  	XCODE_STATUS=`pkgutil --pkg-info=com.apple.pkg.CLTools_Executables | grep "install-time"`
+  	XCODE_RETRIES=$(( $XCODE_RETRIES + 1 ))
 
-
-while :
-do
-	XCODE_STATUS=`pkgutil --pkg-info=com.apple.pkg.CLTools_Executables | grep "install-time"`
-	XCODE_RETRIES=$(( $XCODE_RETRIES + 1 ))
-
-	if [ $XCODE_RETRIES -ge $XCODE_TIMEOUT ]
-	then
-	    echo "Retry timeout $timeout reached while waiting for XCODE to become available"
-	    break           
-	fi
-
-        if [[ "$XCODE_STATUS" =~ ^install-time ]]
-        then
-        	echo "Xcode is available! Proceeding with install."
-        
-		break
-	fi
-	
-	echo "Waiting for your Xcode installation to complete...  (retry $XCODE_RETRIES/$XCODE_TIMEOUT)"
-        sleep $XCODE_POLL_DELAY
-done
-
+  	if [ $XCODE_RETRIES -ge $XCODE_TIMEOUT ]; then 
+      echo "Retry timeout $timeout reached while waiting for XCODE to become available" 
+      break 
+    fi
+    
+    if [[ "$XCODE_STATUS" =~ ^install-time ]]; then 
+      echo "Xcode is available! Proceeding with install."
+      break
+    fi
+    	
+  	echo "Waiting for your Xcode installation to complete...  (retry $XCODE_RETRIES/$XCODE_TIMEOUT)"
+    sleep $XCODE_POLL_DELAY
+  done
+else
+  echo "XCode already installed.  Proceeding with install."
+fi
 
 echo "Fixing PATH in .bash_profile to properly pick up Xcode and macports... your sudo password will be required."
 echo "export PATH=$PATH:/opt/local/bin:/Library/Developer/CommandLineTools/usr/bin" >> ~/.bash_profile
